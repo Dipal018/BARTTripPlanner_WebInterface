@@ -1,0 +1,90 @@
+/* Styles go here */
+/* Styles for header,footer, aside, section, table, etc */
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    background-color: #AEEAFF;
+    clear: left;
+    text-align: center;
+}
+
+footer {
+  background-color: #f2f2f2;
+}
+
+aside {
+    float: left;
+    max-width: 180px;
+    margin: 0;
+    padding: 10px;
+}
+
+aside h2 {
+ margin: 0;
+ font-size: 18px;
+}
+
+aside ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+aside ul a {
+    text-decoration: none;
+}
+
+section {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+
+table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table tr:nth-child(even){background-color: #f2f2f2;}
+
+table tr:hover {background-color: #ddd;}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.leg {
+    background-color: #AEEAFF;
+    margin: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.h2.welcome {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.train-results {
+  transition: all linear 0.5s;
+}
+
+.train-results.ng-hide {
+  opacity: 0;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- BART TRIP PLANNER by DIPAL PATEL (W1233023)
+This index.html file includes modern HTML symantec tags Header, Footer, Aside, Section, headings (h1,h2..)
+It called /sations API to display station information and it allows user to select source and destination station from dropdown list
+By clicking GO button, this website calls /trips API and displays relevant departure time, arrival time, fare of train.
+In addition to that it displays routes(legs) of train from source to destination and realtime train departure time.
+It calles /stations API to display source station information like name, address, city, zipcode in left sidebar.
+It displays countdown until next train leaves toward arrivaal station in minutes and seconds in right section.
+And website updates itself by re-loading the latest information from BART API every 30 seconds and displays refresh information in left side bar.
+It displays the visit count of website in footer
+It displays a message welcoming a user back to site if he or she has visited this page on the browser before. (in right section, above dropdown menus)
+It displays Google route of train from source to destination in right section just below the table of train journey information.
+BONUS - used jquery counter to display remaining time until next train and displayed in right section above map
+The same origin policy - When I send request to bart API (http://api.bart.gov) ,the server sends back a response with an Access-Control-Allow-Origin header with value *. The server responds with a Access-Control-Allow-Origin: *, which means that any request coming from any site is allowed to have access to the contents of the site. If Access-Control-Allow-Origin is assigned to some particular website then only that website is allowed to get the information from source website.The same origin policy
+-->
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>BART</title>
+  <!-- src attribute specifies the URL of external script files, which enables the same JavaScript runs on several pages in a web site by refering to it using the src attribute in the <script> tag.-->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-timer/1.3.5/assets/js/angular-timer-all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-timer/1.3.5/assets/js/angular-timer-bower.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<!-- body element as a root element for the AngularJS application-->
+<body data-ng-app="bart" data-ng-controller="BartCtrl">
+  <div class="container">
+    <!-- HTML symantec tag - headers for displaying title information-->
+    <header>
+      <h1>BART Trip Planner</h1>
+    </header>
+
+    <!-- HTML symentec tag - aside, to display station information and refreshed time information -->
+    <aside>
+      <div data-ng-if="selectedFromStation.name">
+        <h2>Source Info</h2>
+        <ul>
+          <li> {{ selectedFromStation.name }} </li>
+          <li> {{ selectedFromStation.address }} </li>
+          <li> {{ selectedFromStation.city }} </li>
+          <li> {{ selectedFromStation.state }} {{ selectedFromStation.zipcode }} </li>
+        </ul>
+      </div>
+      <div>{{ refreshMessage }}</div>
+    </aside>
+
+    <!-- HTML symentec tag - section, to diplay dropdown list for source and destination station, table of departure time, arrival time, fare and legs information-->
+    <section>
+      <h4><div class="welcome" data-ng-if="$storage.visitCounter > 1">Welcome back! You have visited this site {{ $storage.visitCounter }} times.</div></h4>
+      <h4><div class="welcome" data-ng-if="$storage.visitCounter <= 1">Welcome to BART API Demo!</div></h4>
+      <form name="myForm">
+        <select data-ng-model="selectedFromStation" data-ng-options="station.name for station in stations" required data-ng-change="stopTimer()">
+          <option value="">Select Source</option>
+        </select>
+        <select data-ng-model="selectedToStation" data-ng-options="station.name for station in stations" required data-ng-change="stopTimer()">
+          <option value="">Select Destination</option>
+        </select>
+        <button data-ng-disabled="myForm.$invalid" data-ng-click="onClickGo()">Go</button>
+      </form>
+      <div data-ng-if="trains.length" class="train-results">
+        <!-- Table to display route, departure time, arrival time and fare from source to destination station-->
+        <table>
+          <tr>
+            <th> Route </th>
+            <th> Departure </th>
+            <th> Arrival </th>
+            <th> Fare </th>
+          </tr>
+          <tr data-ng-repeat="train in trains">
+            <td> <span class="leg" data-ng-repeat="leg in train.legs"> {{ leg }} </span> </td>
+            <td> {{ train.scheduledDepartureTimeMin }} </td>
+            <td> {{ train.scheduledArrivalTime }} </td>
+            <td> {{ train.fare }} </td>
+          </tr>
+        </table>
+        <!-- Displaying real time departure time of train to destination station-->
+        <div>
+	  <span> Next train in </span>
+          <span><timer end-time="nextTrainTime" max-time-unit="'minute'">{{minutes}} minutes, {{seconds}} seconds.</timer></span>
+        </div>
+        <iframe width="650" height="250" style="border:0" data-ng-src="{{trustSrc(mapsLink)}}" allowfullscreen></iframe>
+      </div>
+    </section>
+    <!-- HTML symantec tag - footer for displaying visit count of website-->
+    <footer>For COEN 315 by Dipal Patel. Visit count: {{ $storage.visitCounter }}</footer>
+
+  </div>
+
+</body>
+
+</html>
